@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Âncora — pra quando o pensamento não para</title>
+<meta name="description" content="Um lugar seu, offline e privado, pra atravessar o pico da ruminação um passo de cada vez. Nada é enviado, nada sai do seu aparelho.">
+<meta property="og:title" content="Âncora — pra quando o pensamento não para">
+<meta property="og:description" content="Quando o pensamento não para, comece por aqui. Aterramento guiado, o cofre da ruminação e micro-passos de agora. Offline e privado.">
+<style>
+  :root{
+    --ameixa:#2E2233;
+    --ameixa-2:#3d2e45;
+    --rosa:#C9A0A6;
+    --ambar:#E0B27C;
+    --claro:#F3E7E4;
+    --card:rgba(243,231,228,0.06);
+    --card-borda:rgba(243,231,228,0.14);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:Georgia,'Times New Roman',serif;
+    background:linear-gradient(180deg,#4a2f3e 0%,#3a2a3c 22%,var(--ameixa) 55%,#241a29 100%);
+    background-attachment:fixed;
+    color:var(--claro);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:96px;
+    min-height:100vh;
+  }
+  .ambar-topo{
+    height:4px;
+    background:linear-gradient(90deg,transparent,var(--ambar),transparent);
+    opacity:.7;
+  }
+  .wrap{
+    max-width:640px;
+    margin:0 auto;
+    padding:0 22px;
+  }
+  section{padding:64px 0}
+  h1,h2,h3{font-weight:normal;line-height:1.2}
+  h1{
+    font-size:clamp(30px,8vw,50px);
+    letter-spacing:-.5px;
+    margin-bottom:20px;
+  }
+  h2{
+    font-size:clamp(23px,5.5vw,32px);
+    color:var(--ambar);
+    margin-bottom:22px;
+    opacity:.95;
+  }
+  p{font-size:clamp(16px,4vw,18px);margin-bottom:16px;color:rgba(243,231,228,.88)}
+  .sub{color:rgba(243,231,228,.68);font-style:italic}
+
+  /* PRIMEIRA DOBRA */
+  .hero{
+    min-height:88vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    text-align:center;
+    padding-top:40px;
+  }
+  .hero .respira-anel{
+    width:96px;height:96px;
+    margin:0 auto 34px;
+    border-radius:50%;
+    background:radial-gradient(circle,rgba(224,178,124,.35),rgba(201,160,166,.08));
+    border:1px solid rgba(224,178,124,.4);
+    animation:respira 8s ease-in-out infinite;
+  }
+  @keyframes respira{
+    0%,100%{transform:scale(.82);opacity:.55}
+    50%{transform:scale(1.12);opacity:1}
+  }
+  .hero p{max-width:460px;margin-left:auto;margin-right:auto}
+
+  .btn-principal{
+    display:inline-block;
+    font-family:Georgia,serif;
+    font-size:clamp(18px,4.5vw,21px);
+    color:var(--ameixa);
+    background:linear-gradient(180deg,var(--ambar),#d09f66);
+    border:none;
+    border-radius:38px;
+    padding:20px 40px;
+    min-height:56px;
+    margin-top:14px;
+    cursor:pointer;
+    text-decoration:none;
+    box-shadow:0 10px 30px rgba(0,0,0,.28);
+    transition:transform .4s ease, box-shadow .4s ease;
+    letter-spacing:.3px;
+  }
+  .btn-principal:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(0,0,0,.34)}
+  .btn-principal:active{transform:translateY(0)}
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--card-borda);
+    border-radius:24px;
+    padding:30px 26px;
+  }
+
+  /* PROBLEMA */
+  .problema p{font-size:clamp(18px,4.6vw,22px);line-height:1.5}
+  .problema .grande{color:var(--rosa)}
+
+  /* LISTA DO QUE LEVA */
+  .leva-item{
+    display:flex;
+    gap:16px;
+    padding:20px 0;
+    border-bottom:1px solid rgba(243,231,228,.08);
+  }
+  .leva-item:last-child{border-bottom:none}
+  .leva-item .pt{
+    flex:0 0 auto;
+    width:26px;height:26px;margin-top:3px;
+    border-radius:50%;
+    border:1px solid var(--ambar);
+    color:var(--ambar);
+    font-size:13px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .leva-item h3{font-size:18px;color:var(--claro);margin-bottom:4px}
+  .leva-item p{font-size:15px;margin:0;color:rgba(243,231,228,.72)}
+
+  /* OBJEÇÕES */
+  .obj{margin-bottom:26px}
+  .obj .q{color:var(--rosa);font-size:clamp(17px,4.4vw,20px);margin-bottom:6px}
+  .obj .a{color:rgba(243,231,228,.85)}
+
+  /* ==== FERRAMENTAS VIVAS ==== */
+  .ferramenta{margin-top:20px}
+
+  /* ATERRAMENTO */
+  .overlay{
+    position:fixed;inset:0;
+    background:linear-gradient(180deg,#3a2a3c,#201720);
+    z-index:200;
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:32px 24px;
+    overflow-y:auto;
+  }
+  .overlay.ativo{display:flex}
+  .fechar{
+    position:absolute;top:18px;right:20px;
+    background:none;border:none;color:rgba(243,231,228,.6);
+    font-size:30px;cursor:pointer;font-family:Georgia,serif;
+    width:48px;height:48px;line-height:1;
+  }
+  .passo{display:none;max-width:440px;animation:surge .8s ease}
+  .passo.ativo{display:block}
+  @keyframes surge{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+  .bolha{
+    width:min(240px,60vw);height:min(240px,60vw);
+    margin:24px auto;
+    border-radius:50%;
+    background:radial-gradient(circle,rgba(224,178,124,.45),rgba(201,160,166,.06));
+    border:1px solid rgba(224,178,124,.45);
+    display:flex;align-items:center;justify-content:center;
+    transition:transform 4s ease-in-out;
+  }
+  .bolha .rotulo{font-size:22px;color:var(--claro)}
+  .bolha .conta{font-size:15px;color:rgba(243,231,228,.6);margin-top:6px;display:block}
+
+  .cinco li{
+    list-style:none;
+    font-size:clamp(16px,4.4vw,19px);
+    padding:12px 0;
+    color:rgba(243,231,228,.85);
+    border-bottom:1px solid rgba(243,231,228,.08);
+  }
+  .cinco li b{color:var(--ambar)}
+
+  .btn-suave{
+    font-family:Georgia,serif;
+    font-size:17px;
+    background:transparent;
+    color:var(--claro);
+    border:1px solid rgba(224,178,124,.5);
+    border-radius:32px;
+    padding:15px 30px;
+    min-height:52px;
+    margin-top:26px;
+    cursor:pointer;
+    transition:background .3s ease;
+  }
+  .btn-suave:hover{background:rgba(224,178,124,.12)}
+
+  /* COFRE */
+  textarea{
+    width:100%;
+    min-height:130px;
+    font-family:Georgia,serif;
+    font-size:16px;
+    color:var(--claro);
+    background:rgba(0,0,0,.18);
+    border:1px solid var(--card-borda);
+    border-radius:16px;
+    padding:16px;
+    resize:vertical;
+    line-height:1.55;
+  }
+  textarea::placeholder{color:rgba(243,231,228,.4)}
+  textarea:focus{outline:none;border-color:var(--ambar)}
+  .cofre-linha{
+    display:flex;align-items:center;flex-wrap:wrap;gap:10px;
+    margin:16px 0 4px;font-size:16px;color:rgba(243,231,228,.8)
+  }
+  .cofre-linha input[type=time]{
+    font-family:Georgia,serif;font-size:16px;
+    background:rgba(0,0,0,.18);color:var(--claro);
+    border:1px solid var(--card-borda);border-radius:12px;
+    padding:8px 12px;
+  }
+  .btn-cofre{
+    width:100%;
+    font-family:Georgia,serif;font-size:17px;
+    color:var(--ameixa);
+    background:linear-gradient(180deg,var(--rosa),#b98a91);
+    border:none;border-radius:30px;
+    padding:16px;min-height:52px;margin-top:12px;cursor:pointer;
+    transition:transform .3s ease;
+  }
+  .btn-cofre:hover{transform:translateY(-1px)}
+  .cofre-guardado{
+    display:none;
+    text-align:center;
+    padding:24px 10px;
+    animation:surge .8s ease;
+  }
+  .cofre-guardado.ativo{display:block}
+  .cofre-guardado .cadeado{font-size:34px;display:block;margin-bottom:10px}
+  .link-suave{
+    background:none;border:none;color:var(--rosa);
+    font-family:Georgia,serif;font-size:15px;
+    text-decoration:underline;cursor:pointer;margin-top:14px;
+  }
+
+  /* MICRO-PASSOS */
+  .passo-ac{
+    display:flex;align-items:center;gap:16px;
+    padding:16px 4px;
+    border-bottom:1px solid rgba(243,231,228,.08);
+    cursor:pointer;
+    user-select:none;
+  }
+  .passo-ac:last-child{border-bottom:none}
+  .passo-ac .cx{
+    flex:0 0 auto;
+    width:30px;height:30px;
+    border-radius:9px;
+    border:1.5px solid rgba(224,178,124,.55);
+    display:flex;align-items:center;justify-content:center;
+    transition:background .3s ease;
+    color:var(--ameixa);font-size:18px;
+  }
+  .passo-ac.feito .cx{background:var(--ambar);border-color:var(--ambar)}
+  .passo-ac .txt{font-size:clamp(16px,4.4vw,18px)}
+  .passo-ac.feito .txt{color:rgba(243,231,228,.45);text-decoration:line-through}
+  .reset-nota{font-size:14px;color:rgba(243,231,228,.5);font-style:italic;margin-top:16px}
+
+  /* RODAPÉ */
+  .rodape{
+    position:fixed;
+    bottom:0;left:0;right:0;
+    background:rgba(28,20,32,.94);
+    backdrop-filter:blur(8px);
+    border-top:1px solid rgba(224,178,124,.28);
+    z-index:150;
+    padding:12px 18px;
+    text-align:center;
+  }
+  .rodape .linha1{
+    font-size:14px;color:rgba(243,231,228,.7);margin-bottom:6px;font-style:italic
+  }
+  .rodape a{
+    color:var(--ambar);text-decoration:none;font-size:15px;font-weight:bold
+  }
+  .rodape .cvv{
+    display:inline-block;
+    background:rgba(224,178,124,.14);
+    border:1px solid rgba(224,178,124,.4);
+    border-radius:22px;
+    padding:8px 18px;min-height:40px;
+    line-height:1.3;
+  }
+  .rodape .sec{display:block;font-size:12.5px;color:rgba(243,231,228,.55);margin-top:6px}
+  .marca{color:var(--rosa);font-style:italic}
+
+  .nota-privada{
+    text-align:center;font-size:14px;color:rgba(243,231,228,.5);
+    font-style:italic;margin-top:20px;
+  }
+</style>
+</head>
+<body>
+
+<div class="ambar-topo"></div>
+
+<!-- PRIMEIRA DOBRA -->
+<div class="wrap">
+  <header class="hero">
+    <div class="respira-anel"></div>
+    <h1>Quando o pensamento não para, comece por aqui</h1>
+    <p class="sub">Um lugar seu, offline e privado, pra atravessar o pico da ruminação um passo de cada vez.</p>
+    <div>
+      <button class="btn-principal" onclick="abrirAterramento()">Meu pensamento não para</button>
+    </div>
+    <p class="nota-privada">2h da manhã ou meio-dia — tanto faz. Nada aqui é enviado. Fica só no seu aparelho.</p>
+  </header>
+</div>
+
+<!-- PROBLEMA -->
+<div class="wrap">
+  <section class="problema">
+    <p class="grande">Não paro de pensar nisso. Não paro de falar nisso.</p>
+    <p>Sinto que tô enlouquecendo — e sinto que tô afastando todo mundo à minha volta de tanto girar na mesma coisa.</p>
+    <p class="sub">Isso não é você quebrada. É a dor aguda falando alto, e a mente tentando resolver girando em torno da ferida. A saída não é pensar mais. É dar um passo pequeno agora.</p>
+  </section>
+</div>
+
+<!-- O QUE VOCÊ LEVA -->
+<div class="wrap">
+  <section>
+    <h2>O que tem aqui dentro</h2>
+    <div class="card">
+      <div class="leva-item">
+        <span class="pt">1</span>
+        <div>
+          <h3>Aterramento guiado</h3>
+          <p>Respiração 4-7-8 com um círculo que respira junto com você, e depois o 5-4-3-2-1 dos sentidos pra te trazer de volta pro agora.</p>
+        </div>
+      </div>
+      <div class="leva-item">
+        <span class="pt">2</span>
+        <div>
+          <h3>O cofre da ruminação</h3>
+          <p>Você escreve o que está martelando, escolhe uma hora pra voltar nisso, e o texto some da tela — guardado só no seu aparelho.</p>
+        </div>
+      </div>
+      <div class="leva-item">
+        <span class="pt">3</span>
+        <div>
+          <h3>Micro-passos de agora</h3>
+          <p>Cinco ações minúsculas pra marcar. A lista zera todo dia — recomeçar é permitido sempre.</p>
+        </div>
+      </div>
+      <div class="leva-item">
+        <span class="pt">4</span>
+        <div>
+          <h3>Quem ligar quando pesar demais</h3>
+          <p>Um rodapé discreto e sempre à mão, com quem procurar quando o buraco ficar fundo demais pra atravessar sozinha.</p>
+        </div>
+      </div>
+    </div>
+    <p class="nota-privada">Tudo funciona offline. Nada sai do seu aparelho — ninguém vê, nada é enviado.</p>
+  </section>
+</div>
+
+<!-- FERRAMENTA: COFRE -->
+<div class="wrap">
+  <section>
+    <h2>O cofre da ruminação</h2>
+    <p>Escreve aqui o que não larga de você. Escolhe uma hora pra voltar. Não é apagar o pensamento — é marcar hora pra ele, pra tirar a urgência de resolver agora.</p>
+    <div class="card ferramenta">
+      <div id="cofre-form">
+        <textarea id="cofre-texto" placeholder="O que está martelando na sua cabeça agora?"></textarea>
+        <div class="cofre-linha">
+          <span>Guardar até a janela das</span>
+          <input type="time" id="cofre-hora" value="18:00">
+          <span>de hoje.</span>
+        </div>
+        <button class="btn-cofre" onclick="guardarCofre()">Guardar e tirar da tela</button>
+        <p class="nota-privada" style="margin-top:14px">Fica salvo só no seu navegador. Não vai pra internet, não tem cadastro, não tem nuvem.</p>
+      </div>
+      <div id="cofre-guardado" class="cofre-guardado">
+        <span class="cadeado">🔒</span>
+        <p id="cofre-msg">Guardado. Você pode voltar nisso às 18h — agora não precisa carregar.</p>
+        <button class="link-suave" onclick="verCofre()">Quero ver o que guardei</button><br>
+        <button class="link-suave" onclick="limparCofre()">Já resolvi, pode apagar</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- FERRAMENTA: MICRO-PASSOS -->
+<div class="wrap">
+  <section>
+    <h2>Micro-passo de agora</h2>
+    <p>Não precisa querer. A vontade vem depois do movimento, não antes. Marque um. Só um já conta.</p>
+    <div class="card ferramenta">
+      <div id="lista-passos">
+        <div class="passo-ac" data-id="agua"><span class="cx"></span><span class="txt">Beber um copo de água</span></div>
+        <div class="passo-ac" data-id="janela"><span class="cx"></span><span class="txt">Abrir a janela e sentir o ar</span></div>
+        <div class="passo-ac" data-id="amiga"><span class="cx"></span><span class="txt">Mandar mensagem pra uma amiga</span></div>
+        <div class="passo-ac" data-id="fruta"><span class="cx"></span><span class="txt">Comer uma fruta</span></div>
+        <div class="passo-ac" data-id="bale"><span class="cx"></span><span class="txt">Ir ao balé</span></div>
+      </div>
+      <p class="reset-nota">A lista recomeça sozinha amanhã. Cada dia é um novo começo — sem cobrança pelo de ontem.</p>
+    </div>
+  </section>
+</div>
+
+<!-- OBJEÇÕES -->
+<div class="wrap">
+  <section>
+    <h2>O que talvez você esteja pensando</h2>
+    <div class="obj">
+      <p class="q">Isso não é fugir do problema, empurrar com a barriga?</p>
+      <p class="a">Não. Ruminar não resolve — só reabre a ferida. Guardar o pensamento pra uma janela marcada é adiar de propósito, pra <em>você</em> decidir quando olhar, em vez de ser arrastada o dia inteiro.</p>
+    </div>
+    <div class="obj">
+      <p class="q">Alguém vai ver o que eu escrevi aqui?</p>
+      <p class="a">Ninguém. Fica salvo só no seu aparelho, não vai pra internet, não tem cadastro, não tem nuvem. É seu.</p>
+    </div>
+    <div class="obj">
+      <p class="q">E se nada disso funcionar e eu continuar afundando?</p>
+      <p class="a">Aí você usa o rodapé. Pedir ajuda de um humano não é fracasso — é o passo certo quando a dor fica grande demais pra atravessar sozinha.</p>
+    </div>
+  </section>
+</div>
+
+<!-- FECHAMENTO -->
+<div class="wrap">
+  <section style="text-align:center">
+    <h2 style="color:var(--claro)">Quando o pensamento apertar de novo</h2>
+    <p class="sub">É pra isso que essa tela existe. Não precisa esperar chegar no fundo.</p>
+    <button class="btn-principal" onclick="abrirAterramento()">Meu pensamento não para</button>
+  </section>
+</div>
+
+<!-- ============ OVERLAY DO ATERRAMENTO ============ -->
+<div class="overlay" id="overlay">
+  <button class="fechar" onclick="fecharAterramento()" aria-label="Fechar">×</button>
+
+  <!-- passo respiração -->
+  <div class="passo ativo" id="p-respira">
+    <p class="sub" id="respira-instrucao">Vamos respirar juntas. Siga o círculo.</p>
+    <div class="bolha" id="bolha">
+      <div>
+        <span class="rotulo" id="bolha-rotulo">Prepare-se</span>
+        <span class="conta" id="bolha-conta"></span>
+      </div>
+    </div>
+    <p class="sub" id="respira-contador">Ciclo 0 de 4</p>
+    <div>
+      <button class="btn-suave" id="btn-respira" onclick="iniciarRespira()">Começar a respirar</button>
+    </div>
+    <div>
+      <button class="link-suave" onclick="irCinco()">Pular pros sentidos →</button>
+    </div>
+  </div>
+
+  <!-- passo 5-4-3-2-1 -->
+  <div class="passo" id="p-cinco">
+    <p class="sub">Agora, sem pressa, encontre à sua volta:</p>
+    <ul class="cinco">
+      <li><b>5 coisas</b> que você consegue ver</li>
+      <li><b>4 coisas</b> que você consegue tocar</li>
+      <li><b>3 coisas</b> que você consegue ouvir</li>
+      <li><b>2 coisas</b> que você consegue cheirar</li>
+      <li><b>1 coisa</b> que você consegue provar</li>
+    </ul>
+    <p class="sub" style="margin-top:20px">Não precisa acertar tudo. Só reparar já traz você de volta pra este quarto, este momento.</p>
+    <div>
+      <button class="btn-suave" onclick="fecharAterramento()">Estou mais aqui agora</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ RODAPÉ FIXO ============ -->
+<footer class="rodape">
+  <div class="linha1">Se o buraco ficar fundo demais, não atravesse sozinha:</div>
+  <a class="cvv" href="tel:188"><span class="marca">CVV</span> · ligue <b>188</b> — 24h, gratuito e sigiloso</a>
+  <span class="sec">Também por chat em cvv.org.br · Emergência: 192 &nbsp;|&nbsp; CAPS/UBS perto de você: <em>a verificar</em></span>
+</footer>
+
+<script>
+/* ================= ATERRAMENTO ================= */
+var overlay=document.getElementById('overlay');
+var respiraAtiva=false, timerResp=null;
+
+function abrirAterramento(){
+  overlay.classList.add('ativo');
+  document.getElementById('p-respira').classList.add('ativo');
+  document.getElementById('p-cinco').classList.remove('ativo');
+  resetRespira();
+  document.body.style.overflow='hidden';
+}
+function fecharAterramento(){
+  overlay.classList.remove('ativo');
+  pararRespira();
+  document.body.style.overflow='';
+}
+function resetRespira(){
+  document.getElementById('bolha-rotulo').textContent='Prepare-se';
+  document.getElementById('bolha-conta').textContent='';
+  document.getElementById('respira-contador').textContent='Ciclo 0 de 4';
+  document.getElementById('btn-respira').style.display='inline-block';
+  document.getElementById('bolha').style.transform='scale(0.7)';
+}
+function pararRespira(){
+  respiraAtiva=false;
+  if(timerResp){clearTimeout(timerResp);timerResp=null;}
+}
+
+/* fases 4-7-8 */
+var fases=[
+  {rotulo:'Inspire',seg:4,escala:1.15},
+  {rotulo:'Segure',seg:7,escala:1.15},
+  {rotulo:'Solte devagar',seg:8,escala:0.7}
+];
+
+function iniciarRespira(){
+  document.getElementById('btn-respira').style.display='none';
+  respiraAtiva=true;
+  rodarCiclo(1);
+}
+
+function rodarCiclo(ciclo){
+  if(!respiraAtiva) return;
+  if(ciclo>4){
+    document.getElementById('bolha-rotulo').textContent='Bem feito';
+    document.getElementById('bolha-conta').textContent='';
+    document.getElementById('respira-contador').textContent='Você respirou. Sinta o corpo mais lento.';
+    setTimeout(function(){ if(respiraAtiva) irCinco(); },2600);
+    return;
+  }
+  document.getElementById('respira-contador').textContent='Ciclo '+ciclo+' de 4';
+  rodarFase(0,ciclo);
+}
+
+function rodarFase(i,ciclo){
+  if(!respiraAtiva) return;
+  if(i>=fases.length){ rodarCiclo(ciclo+1); return; }
+  var f=fases[i];
+  var bolha=document.getElementById('bolha');
+  bolha.style.transition='transform '+f.seg+'s ease-in-out';
+  bolha.style.transform='scale('+f.escala+')';
+  document.getElementById('bolha-rotulo').textContent=f.rotulo;
+  var restante=f.seg;
+  document.getElementById('bolha-conta').textContent=restante;
+  var contarInt=setInterval(function(){
+    restante--;
+    if(restante>=0) document.getElementById('bolha-conta').textContent=restante;
+  },1000);
+  timerResp=setTimeout(function(){
+    clearInterval(contarInt);
+    rodarFase(i+1,ciclo);
+  },f.seg*1000);
+}
+
+function irCinco(){
+  pararRespira();
+  document.getElementById('p-respira').classList.remove('ativo');
+  document.getElementById('p-cinco').classList.add('ativo');
+}
+
+/* ================= COFRE ================= */
+var CHAVE_COFRE='ancora_cofre';
+
+function mostrarEstadoCofre(){
+  var salvo=null;
+  try{ salvo=JSON.parse(localStorage.getItem(CHAVE_COFRE)); }catch(e){}
+  if(salvo && salvo.texto){
+    document.getElementById('cofre-form').style.display='none';
+    document.getElementById('cofre-guardado').classList.add('ativo');
+    document.getElementById('cofre-msg').textContent='Guardado. Você pode voltar nisso às '+salvo.hora+' — agora não precisa carregar.';
+  }else{
+    document.getElementById('cofre-form').style.display='block';
+    document.getElementById('cofre-guardado').classList.remove('ativo');
+  }
+}
+function guardarCofre(){
+  var texto=document.getElementById('cofre-texto').value.trim();
+  if(!texto){ document.getElementById('cofre-texto').focus(); return; }
+  var hora=document.getElementById('cofre-hora').value||'18:00';
+  try{ localStorage.setItem(CHAVE_COFRE,JSON.stringify({texto:texto,hora:hora,quando:Date.now()})); }catch(e){}
+  document.getElementById('cofre-texto').value='';
+  mostrarEstadoCofre();
+}
+function verCofre(){
+  var salvo=null;
+  try{ salvo=JSON.parse(localStorage.getItem(CHAVE_COFRE)); }catch(e){}
+  if(salvo && salvo.texto){
+    document.getElementById('cofre-texto').value=salvo.texto;
+    document.getElementById('cofre-hora').value=salvo.hora;
+    document.getElementById('cofre-form').style.display='block';
+    document.getElementById('cofre-guardado').classList.remove('ativo');
+  }
+}
+function limparCofre(){
+  try{ localStorage.removeItem(CHAVE_COFRE); }catch(e){}
+  document.getElementById('cofre-texto').value='';
+  mostrarEstadoCofre();
+}
+
+/* ================= MICRO-PASSOS (reset diário) ================= */
+var CHAVE_PASSOS='ancora_passos';
+function hoje(){ var d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+
+function carregarPassos(){
+  var dados={dia:hoje(),feitos:{}};
+  try{
+    var raw=JSON.parse(localStorage.getItem(CHAVE_PASSOS));
+    if(raw && raw.dia===hoje()) dados=raw;
+  }catch(e){}
+  document.querySelectorAll('.passo-ac').forEach(function(el){
+    var id=el.getAttribute('data-id');
+    if(dados.feitos[id]){
+      el.classList.add('feito');
+      el.querySelector('.cx').textContent='✓';
+    }else{
+      el.classList.remove('feito');
+      el.querySelector('.cx').textContent='';
+    }
+    el.onclick=function(){ alternarPasso(el); };
+  });
+}
+function alternarPasso(el){
+  var id=el.getAttribute('data-id');
+  var dados={dia:hoje(),feitos:{}};
+  try{
+    var raw=JSON.parse(localStorage.getItem(CHAVE_PASSOS));
+    if(raw && raw.dia===hoje()) dados=raw;
+  }catch(e){}
+  if(dados.feitos[id]){
+    delete dados.feitos[id];
+    el.classList.remove('feito');
+    el.querySelector('.cx').textContent='';
+  }else{
+    dados.feitos[id]=true;
+    el.classList.add('feito');
+    el.querySelector('.cx').textContent='✓';
+  }
+  try{ localStorage.setItem(CHAVE_PASSOS,JSON.stringify(dados)); }catch(e){}
+}
+
+/* init */
+mostrarEstadoCofre();
+carregarPassos();
+</script>
+</body>
+</html>
