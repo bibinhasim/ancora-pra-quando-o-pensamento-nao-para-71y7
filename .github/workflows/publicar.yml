@@ -1,0 +1,48 @@
+# Publica o site no GitHub Pages.
+#
+# Este repositório nasceu com o index.html e mais nada — nenhum workflow. Criar
+# o repositório e dar push NÃO publica: falta este passo, e é por isso que o
+# endereço dava 404. É o mesmo defeito do "companheiro de respiração", e ele
+# volta em TODO repositório novo, porque quem publica cria o repo e para aí.
+#
+# ATENÇÃO — o que este arquivo NÃO consegue fazer: o Pages precisa ser LIGADO
+# UMA VEZ à mão, em Settings → Pages → Source: "GitHub Actions". Eu tentei ligar
+# pelo `enablement: true` do configure-pages e o GitHub recusou:
+#   Create Pages site failed. Error: Resource not accessible by integration
+# O token do Actions não tem permissão pra criar o site. Depois desse clique,
+# este workflow publica sozinho a cada push, e nunca mais precisa de nada.
+
+name: Publicar o site
+
+on:
+  push:
+    branches: [main]
+  # pra poder republicar à mão pelo botão "Run workflow"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Uma publicação por vez. Se ela empurrar duas mudanças seguidas, a segunda
+# espera em vez de brigar com a primeira — mas não cancela o que já está no ar.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          # o site é a raiz do repositório: index.html está aqui
+          path: .
+      - id: deploy
+        uses: actions/deploy-pages@v4
