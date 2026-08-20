@@ -27,8 +27,14 @@ permissions:
 
 # Uma publicação por vez. Se ela empurrar duas mudanças seguidas, a segunda
 # espera em vez de brigar com a primeira — mas não cancela o que já está no ar.
+#
+# O NOME DO GRUPO MUDOU DE PROPÓSITO (2026-08-19): a primeira execução ficou
+# presa em "waiting" porque nasceu ANTES de o Pages ser ligado em Settings →
+# Pages → Source: GitHub Actions — e execução travada assim não destrava
+# sozinha. Enquanto ela segurava o grupo "pages", toda execução nova ficava na
+# fila atrás dela, esperando pra sempre. Grupo novo = fila nova.
 concurrency:
-  group: pages
+  group: pages-publicar
   cancel-in-progress: false
 
 jobs:
